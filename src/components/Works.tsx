@@ -223,19 +223,65 @@ export default function Works() {
     wild_moss_perfume: 0,
     vert_chronograph: 0,
   });
-  const [cardCustomImages, setCardCustomImages] = useState<Record<string, string>>({});
-  const [projectCustomGallery, setProjectCustomGallery] = useState<Record<string, Record<number, string>>>({});
+  const [cardCustomImages, setCardCustomImages] = useState<Record<string, string>>(() => {
+    try {
+      const saved = localStorage.getItem("cardCustomImages");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [projectCustomGallery, setProjectCustomGallery] = useState<Record<string, Record<number, string>>>(() => {
+    try {
+      const saved = localStorage.getItem("projectCustomGallery");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
   const lastWheelTime = useRef<number>(0);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("cardCustomImages", JSON.stringify(cardCustomImages));
+    } catch (e) {
+      console.error("Failed to save cardCustomImages to localStorage:", e);
+    }
+  }, [cardCustomImages]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("projectCustomGallery", JSON.stringify(projectCustomGallery));
+    } catch (e) {
+      console.error("Failed to save projectCustomGallery to localStorage:", e);
+    }
+  }, [projectCustomGallery]);
 
   const getProjectImagesWithCustom = (projectId: string) => {
     const rawList = getGalleryImages(projectId);
     const customGallery = projectCustomGallery[projectId] || {};
-    return rawList.map((img, idx) => {
-      const customUrl = customGallery[idx];
+    const customIndices = Object.keys(customGallery).map(Number).sort((a, b) => a - b);
+
+    if (customIndices.length > 0) {
+      return customIndices.map((idx, index) => {
+        const customUrl = customGallery[idx];
+        const zeroPadded = String(index + 1).padStart(2, '0');
+        let title = "本地上传细节";
+        if (projectId === "aetheris") title = `三维渲染细节 ${zeroPadded}`;
+        else if (projectId === "orcus_audio") title = `AIGC 细节 ${zeroPadded}`;
+        else if (projectId === "vert_chronograph") title = `详情页设计细节 ${zeroPadded}`;
+        return {
+          url: customUrl,
+          title: title,
+          isCustomized: true,
+        };
+      });
+    }
+
+    return rawList.map((img) => {
       return {
         ...img,
-        url: customUrl || img.url,
-        isCustomized: !!customUrl,
+        isCustomized: false,
       };
     });
   };

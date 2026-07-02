@@ -107,24 +107,6 @@ export default function About() {
               关于我
             </h2>
           </div>
-          <div className="mt-4 md:mt-0 flex items-center">
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-stone-900 border border-stone-900 text-white rounded-full text-xs font-mono font-semibold tracking-wider hover:bg-transparent hover:text-stone-900 transition-all shadow-md active:scale-95 cursor-pointer"
-            >
-              {isEditing ? (
-                <>
-                  <Save className="w-3.5 h-3.5" />
-                  <span>保存档案 // SAVE PROFILE</span>
-                </>
-              ) : (
-                <>
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>编辑个人资料 // EDIT DOSSIER</span>
-                </>
-              )}
-            </button>
-          </div>
         </div>
 
         {/* Dynamic Editorial Content Section */}
@@ -221,42 +203,20 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right Column: Dynamic Photo Composition with Direct Hover Change Option */}
+          {/* Right Column: Static Photo Composition */}
           <div className="lg:col-span-6 flex justify-center w-full" id="about-visual-editorial-panel">
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-[2rem] border border-stone-300/60 shadow-lg overflow-hidden group transition-all duration-500 hover:shadow-2xl hover:border-stone-400/80">
+            <div className="relative w-full max-w-md aspect-[3/4] rounded-[2rem] border border-stone-300/60 shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl">
               
               <img 
                 src={portrait}
                 alt="骆子明 个人肖像"
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
               
               {/* Subtle Linear Shadow Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-stone-900/10 pointer-events-none transition-all duration-500 group-hover:from-stone-950/50" />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/30 via-transparent to-stone-900/5 pointer-events-none" />
               
-              {/* Elegant Simple Click-to-Upload trigger overlay */}
-              <div className="absolute inset-0 bg-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2">
-                <button
-                  type="button"
-                  onClick={triggerUpload}
-                  className="px-4 py-2 bg-white/95 text-stone-900 hover:bg-stone-900 hover:text-white rounded-full text-xs font-mono font-bold tracking-wider shadow-md active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Camera className="w-3.5 h-3.5" />
-                  <span>更换肖像照片 // Change Portrait</span>
-                </button>
-                <span className="text-[10px] text-white/80 font-mono font-medium tracking-wide drop-shadow">
-                  支持 JPG/PNG 等格式
-                </span>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept="image/*"
-                  className="hidden"
-                />
-              </div>
-
             </div>
           </div>
 

@@ -328,88 +328,7 @@ export default function Works() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent transition-all duration-500" />
                 </div>
 
-                {/* Image switcher toolbar */}
-                <div className="absolute top-6 left-6 z-20 flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
-                  {/* Preset cycle button */}
-                  <div className="flex items-center gap-1.5 bg-stone-900/90 backdrop-blur-md border border-stone-800/50 p-1 px-2.5 rounded-full text-stone-400 select-none hover:text-white transition-all shadow-lg">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCardImageIndices((prev) => ({
-                          ...prev,
-                          [project.id]: prev[project.id] === 0 ? presetList.length - 1 : prev[project.id] - 1
-                        }));
-                      }}
-                      className="p-1 hover:text-white active:scale-90 transition-all"
-                      title="上一个图片"
-                    >
-                      <ArrowLeft className="w-3 h-3" />
-                    </button>
-                    <span className="font-mono text-[9px] tracking-widest text-stone-300 font-bold px-0.5">
-                      PASS {String(currentIdx + 1).padStart(2, '0')}
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCardImageIndices((prev) => ({
-                          ...prev,
-                          [project.id]: (prev[project.id] + 1) % presetList.length
-                        }));
-                      }}
-                      className="p-1 hover:text-white active:scale-90 transition-all"
-                      title="下一个图片"
-                    >
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
 
-                  {/* Upload button */}
-                  <label
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex p-2 bg-stone-900/90 backdrop-blur-md border border-stone-800/50 rounded-full text-stone-400 hover:text-emerald-400 hover:border-emerald-500/35 active:scale-90 transition-all shadow-lg cursor-pointer"
-                    title="上传自定义本地图片"
-                  >
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
-                            if (event.target?.result) {
-                              setCardCustomImages((prev) => ({
-                                ...prev,
-                                [project.id]: event.target!.result as string
-                              }));
-                            }
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                      className="hidden"
-                    />
-                    <Upload className="w-3.5 h-3.5" />
-                  </label>
-
-                  {/* Reset custom image button */}
-                  {customCover && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCardCustomImages((prev) => {
-                          const updated = { ...prev };
-                          delete updated[project.id];
-                          return updated;
-                        });
-                      }}
-                      className="flex p-2 bg-rose-950/90 hover:bg-rose-900/90 backdrop-blur-md border border-rose-900/40 rounded-full text-rose-300 active:scale-90 transition-all shadow-lg"
-                      title="恢复预设图片"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
 
                 {/* Big Low-Opacity Index Number on Card top-right */}
                 <span className="absolute top-6 right-6 font-mono text-3.5xl font-extrabold text-white/10 select-none group-hover:text-white/20 transition-colors duration-300">
@@ -493,83 +412,132 @@ export default function Works() {
                   </div>
 
                   {/* Top-Center Gallery Customization Control */}
-                  {!isGridView && (
-                    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-stone-900/90 backdrop-blur-md border border-stone-700/80 p-1.5 px-3 rounded-full shadow-2xl select-none">
-                      <span className="text-[10px] uppercase font-mono tracking-wider text-stone-400 border-r border-stone-800 pr-2.5 mr-1 font-bold">
-                        图层 #{String(activeImageIndex + 1).padStart(2, '0')}
-                      </span>
-                      {/* Replace Button */}
-                      <label className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-900/40 hover:border-emerald-500/40 text-emerald-300 rounded-full text-[10px] font-bold tracking-wide transition-all cursor-pointer hover:scale-102 active:scale-98">
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>更换本地图片</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const reader = new FileReader();
-                              reader.onload = (event) => {
-                                if (event.target?.result) {
-                                  const base64Src = event.target.result as string;
-                                  setProjectCustomGallery((prev) => {
-                                    const currentProjectCustoms = prev[selectedProject.id] || {};
-                                    return {
-                                      ...prev,
-                                      [selectedProject.id]: {
-                                        ...currentProjectCustoms,
-                                        [activeImageIndex]: base64Src
-                                      }
-                                    };
-                                  });
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }
-                          }}
-                          className="hidden"
-                        />
-                      </label>
-                      {/* Restore This Image Button */}
-                      {list[activeImageIndex]?.isCustomized && (
-                        <button
-                          onClick={() => {
-                            setProjectCustomGallery((prev) => {
-                              const currentProjectCustoms = { ...(prev[selectedProject.id] || {}) };
-                              delete currentProjectCustoms[activeImageIndex];
-                              return {
-                                ...prev,
-                                [selectedProject.id]: currentProjectCustoms
-                              };
-                            });
-                          }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-950/45 hover:bg-rose-900/45 border border-rose-900/35 hover:border-rose-500/30 text-rose-300 rounded-full text-[10px] font-bold tracking-wide transition-all hover:scale-102 active:scale-98"
-                          title="还原这张为原设"
-                        >
-                          <RotateCcw className="w-3.5 h-3.5" />
-                          <span>恢复原图</span>
-                        </button>
-                      )}
-                      {/* Reset All Gallery Customized Images for this project */}
-                      {Object.keys(projectCustomGallery[selectedProject.id] || {}).length > 0 && (
-                        <button
-                          onClick={() => {
-                            if (confirm("确定要恢复这30张图片的所有默认渲染原图吗？")) {
+                  <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 flex flex-wrap items-center justify-center gap-2 bg-stone-900/95 backdrop-blur-md border border-stone-700/80 p-1.5 px-3 rounded-full shadow-2xl select-none max-w-[90vw]">
+                    {!isGridView && (
+                      <>
+                        <span className="text-[10px] uppercase font-mono tracking-wider text-stone-400 border-r border-stone-800 pr-2.5 mr-1 font-bold">
+                          图层 #{String(activeImageIndex + 1).padStart(2, '0')}
+                        </span>
+                        {/* Replace Button */}
+                        <label className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-900/40 hover:border-emerald-500/40 text-emerald-300 rounded-full text-[10px] font-bold tracking-wide transition-all cursor-pointer hover:scale-102 active:scale-98">
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>更换当前图片</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                  if (event.target?.result) {
+                                    const base64Src = event.target.result as string;
+                                    setProjectCustomGallery((prev) => {
+                                      const currentProjectCustoms = prev[selectedProject.id] || {};
+                                      return {
+                                        ...prev,
+                                        [selectedProject.id]: {
+                                          ...currentProjectCustoms,
+                                          [activeImageIndex]: base64Src
+                                        }
+                                      };
+                                    });
+                                  }
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                        {/* Restore This Image Button */}
+                        {list[activeImageIndex]?.isCustomized && (
+                          <button
+                            onClick={() => {
                               setProjectCustomGallery((prev) => {
-                                const copy = { ...prev };
-                                delete copy[selectedProject.id];
-                                return copy;
+                                const currentProjectCustoms = { ...(prev[selectedProject.id] || {}) };
+                                delete currentProjectCustoms[activeImageIndex];
+                                return {
+                                  ...prev,
+                                  [selectedProject.id]: currentProjectCustoms
+                                };
                               });
-                            }
-                          }}
-                          className="flex items-center gap-1 px-2.5 py-1.5 bg-stone-800/85 hover:bg-stone-700/85 border border-stone-700/60 text-stone-300 rounded-full text-[10px] font-medium tracking-wide transition-all active:scale-95"
-                          title="恢复本套作品的30张图片为默认原图"
-                        >
-                          <span>重置整套</span>
-                        </button>
-                      )}
-                    </div>
-                  )}
+                            }}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-950/45 hover:bg-rose-900/45 border border-rose-900/35 hover:border-rose-500/30 text-rose-300 rounded-full text-[10px] font-bold tracking-wide transition-all hover:scale-102 active:scale-98"
+                            title="还原这张为原设"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            <span>恢复原图</span>
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    {/* Batch Replace All Images Button */}
+                    <label className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-950/40 hover:bg-sky-900/40 border border-sky-900/40 hover:border-sky-500/40 text-sky-300 rounded-full text-[10px] font-bold tracking-wide transition-all cursor-pointer hover:scale-102 active:scale-98">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>一次性替换全部 ({list.length}张)</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                          const files = e.target.files;
+                          if (files && files.length > 0) {
+                            const fileArray = Array.from(files) as File[];
+                            const promises = fileArray.map((file) => {
+                              return new Promise<string>((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                  resolve(event.target?.result as string || "");
+                                };
+                                reader.readAsDataURL(file);
+                              });
+                            });
+                            Promise.all(promises).then((results) => {
+                              const validResults = results.filter(Boolean);
+                              if (validResults.length > 0) {
+                                setProjectCustomGallery((prev) => {
+                                  const currentProjectCustoms = { ...(prev[selectedProject.id] || {}) };
+                                  validResults.forEach((base64Src, index) => {
+                                    if (index < list.length) {
+                                      currentProjectCustoms[index] = base64Src;
+                                    }
+                                  });
+                                  return {
+                                    ...prev,
+                                    [selectedProject.id]: {
+                                      ...currentProjectCustoms
+                                    }
+                                  };
+                                });
+                              }
+                            });
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {/* Reset All Gallery Customized Images for this project */}
+                    {Object.keys(projectCustomGallery[selectedProject.id] || {}).length > 0 && (
+                      <button
+                        onClick={() => {
+                          if (confirm(`确定要恢复这 ${list.length} 张图片的所有默认渲染原图吗？`)) {
+                            setProjectCustomGallery((prev) => {
+                              const copy = { ...prev };
+                              delete copy[selectedProject.id];
+                              return copy;
+                            });
+                          }
+                        }}
+                        className="flex items-center gap-1 px-2.5 py-1.5 bg-stone-800/85 hover:bg-stone-700/85 border border-stone-700/60 text-stone-300 rounded-full text-[10px] font-medium tracking-wide transition-all active:scale-95"
+                        title={`恢复本套作品的 ${list.length} 张图片为默认原图`}
+                      >
+                        <span>重置整套</span>
+                      </button>
+                    )}
+                  </div>
  
                   {/* Clean solid dark background without any blur effects */}
                   <div className="absolute inset-0 z-0 bg-stone-950" />

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..805;1,100..805&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-moss-50: #f4f6f3;
+  --color-moss-100: #e5ede7;
+  --color-moss-200: #d6e2d9;
+  --color-moss-300: #b9ccbe;
+  --color-moss-400: #93af9b;
+  --color-moss-500: #6c8f77;
+  --color-moss-650: #4a6c54;
+  --color-moss-800: #2a3f31;
+  --color-moss-900: #1b281f;
+
+  --color-stone-50: #fbfbfb;
+  --color-stone-100: #f3f5f2;
+  --color-stone-200: #e8eae5;
+  --color-stone-300: #d2d5ce;
+  --color-stone-800: #292a28;
+  --color-stone-900: #1a1b1a;
+
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Outfit", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --animate-float-slow: float-slow 16s ease-in-out infinite;
+  --animate-float-medium: float-medium 10s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-stone-100);
+  color: var(--color-stone-900);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-stone-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-moss-300);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-moss-500);
+}
+
+.glassmorphism {
+  background: rgba(243, 245, 242, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glow-subtle {
+  box-shadow: 0 4px 30px rgba(108, 143, 119, 0.04);
+}

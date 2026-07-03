@@ -1,11 +1,45 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { Camera, Edit2, Save, Upload, User, Globe, Mail, Phone, MessageSquare, Copy, Check } from "lucide-react";
+import { idbGet, idbSet } from "../lib/idb";
 
 export default function About() {
-  const [portrait, setPortrait] = useState<string>(() => {
-    return localStorage.getItem("ziming_about_portrait") || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1000";
-  });
+  const [portrait, setPortrait] = useState<string>("https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1000");
+  const isPortraitInitialized = useRef(false);
+
+  useEffect(() => {
+    async function loadPortrait() {
+      let saved = await idbGet<string>("ziming_about_portrait");
+      if (!saved) {
+        try {
+          saved = localStorage.getItem("ziming_about_portrait") || "";
+          if (saved) {
+            await idbSet("ziming_about_portrait", saved);
+          }
+        } catch {
+          saved = "";
+        }
+      }
+      if (saved) {
+        setPortrait(saved);
+      }
+      isPortraitInitialized.current = true;
+    }
+    loadPortrait();
+  }, []);
+
+  useEffect(() => {
+    if (!isPortraitInitialized.current) return;
+    async function savePortrait() {
+      await idbSet("ziming_about_portrait", portrait);
+      try {
+        localStorage.setItem("ziming_about_portrait", portrait);
+      } catch (e) {
+        // Suppress localStorage quota errors since IndexedDB succeeds
+      }
+    }
+    savePortrait();
+  }, [portrait]);
 
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
 
@@ -61,19 +95,14 @@ export default function About() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 3 * 1024 * 1024) {
-        alert("图片大小不能超过 3MB // Image size should not exceed 3MB");
+      if (file.size > 5 * 1024 * 1024) {
+        alert("图片大小不能超过 5MB // Image size should not exceed 5MB");
         return;
       }
       const reader = new FileReader();
       reader.onload = (event) => {
         const result = event.target?.result as string;
-        try {
-          setPortrait(result);
-          localStorage.setItem("ziming_about_portrait", result);
-        } catch {
-          setPortrait(result);
-        }
+        setPortrait(result);
       };
       reader.readAsDataURL(file);
     }

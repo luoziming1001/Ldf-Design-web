@@ -125,79 +125,25 @@ const elegantChTitles: Record<string, string> = {
 };
 
 const getGalleryImages = (projectId: string): { url: string; title: string }[] => {
-  const aetherisIDs = [
-    "photo-1608248597481-496100c80836", "photo-1617897903246-719242758050", "photo-1601049541289-9b1b7bbbfe19",
-    "photo-1612817288484-6f916006741a", "photo-1620916566398-39f1143ab7be", "photo-1556228720-195a672e8a03",
-    "photo-1626806787461-102c1bfaaea1", "photo-1631730359575-38e4755d772b", "photo-1571781926291-c477ebfd024b",
-    "photo-1526947425960-945c6e72858f", "photo-1512290923902-8a9f81dc236c", "photo-1608571423902-eed4a5ad8108",
-    "photo-1616683693504-3ea7e9ad6fec", "photo-1629732047847-50b7ecf0cbf1", "photo-1598440947619-2c35fc9aa908",
-    "photo-1535585209827-a15fcdbc4c2d", "photo-1501183007986-d0d080b147f9", "photo-1515688594390-b649af70d282",
-    "photo-1594489428504-5c0c480a15fa", "photo-1508746829417-e6f548d8d6ed", "photo-1570554886111-c80fcca7a051",
-    "photo-1618005182384-a83a8bd57fbe", "photo-1512209994916-70e9dec0271c", "photo-1545239351-ef35f43d514b",
-    "photo-1556228453-efd6c1ff04f6", "photo-1590483736148-3c1d58742807", "photo-1601049676099-e7ed07d825b0",
-    "photo-1614850523011-8f49fc9ec671", "photo-1522335789203-aabd1fc54bc9", "photo-1598440947619-2c35fc9aa908"
-  ];
-
-  const orcusIDs = [
-    "photo-1583394838336-acd977736f90", "photo-1545239351-ef35f43d514b", "photo-1505740420928-5e560c06d30e",
-    "photo-1484704849700-f032a568e944", "photo-1524678606370-a47ad25cb82a", "photo-1546435770-a3e426bf472b",
-    "photo-1618336753974-aae8e04506aa", "photo-1583394838336-acd977736f90", "photo-1487215078519-e21cc028cb29",
-    "photo-1511379938547-c1f69419868d", "photo-1470225620780-dba8ba36b745", "photo-1508700115892-45ecd05ae2ad",
-    "photo-1506157786151-b8491531f063", "photo-1519681393784-d120267933ba", "photo-1600585154340-be6161a56a0c",
-    "photo-1513829096960-ef0a33b9c148", "photo-1486406146926-c627a92ad1ab", "photo-1513694203232-719a280e022f",
-    "photo-1498050108023-c5249f4df085", "photo-1526374965328-7f61d4dc18c5", "photo-1542751371-adc38448a05e",
-    "photo-1550745165-9bc0b252726f", "photo-1555066931-4365d14bab8c", "photo-1527474305487-b87b222841cc",
-    "photo-1518770660439-4636190af475", "photo-1563986768609-322da13575f3", "photo-1516259762381-22954d7d3ad2",
-    "photo-1552664730-d307ca884978", "photo-1461749280684-dccba630e2f6", "photo-1504639725590-34d0984388bd"
-  ];
-
-  const wildMossIDs = [
-    "photo-1523450001312-ffd43755c687", "photo-1579546929518-9e396f3cc809", "photo-1594035910387-fea47794261f",
-    "photo-1547887537-6158d64c35e3", "photo-1592945403244-b3fbafd7f539", "photo-1615396187826-b9b82da906fc",
-    "photo-1595425970377-c9703cf48b6d", "photo-1512290923902-8a9f81dc236c", "photo-1590156221120-7ff29046c82e",
-    "photo-1616949755610-8c9bbc08f138", "photo-1448375240586-882707db888b", "photo-1502082553048-f009c37129b9",
-    "photo-1464822759023-fed622ff2c3b", "photo-1511497584788-876760111969", "photo-1473448912268-2022ce9509d8",
-    "photo-1525253013412-55c1a69a5738", "photo-1507525428034-b723cf961d3e", "photo-1519046904884-53103b34b206",
-    "photo-1544735716-392fe2489ffa", "photo-1505118380757-91f5f5632de0", "photo-1513542789411-b6a5d4f31634",
-    "photo-1520262454473-a1a82277a893", "photo-1540555700478-4be289fbecef", "photo-1500627764786-fb15eb49eff0",
-    "photo-1416339306562-f3d12fefd36f", "photo-1441974231531-c6227db76b6e", "photo-1472289065668-ce650ac443d2",
-    "photo-1462331940025-496dfbfc7564", "photo-1434064511983-18c6dae20ed5", "photo-1523450001312-ffd43755c687"
-  ];
-
-  const vertIDs = [
-    "photo-1524592094714-0f0654e20314", "photo-1523275335684-37898b6baf30", "photo-1542496658-e33a6d0d50f6",
-    "photo-1547996160-81dfa63595aa", "photo-1509198397868-475647b2a1e5", "photo-1612817159949-195b6eb9e31a",
-    "photo-1508685096489-7aacd43bd3b1", "photo-1614162692292-7ac56d7f7f1e", "photo-1522337360788-8b13dee7a37e",
-    "photo-1619134778706-7015533a6150", "photo-1639006570490-79c0c53f1080", "photo-1495856458515-083d14e177ad",
-    "photo-1533139502938-02b2880935da", "photo-1451187580459-43490279c0fa", "photo-1504384308090-c894fdcc538d",
-    "photo-1504608524841-42fe6f032b4b", "photo-1518770660439-4636190af475", "photo-1550751827-4bd374c3f58b",
-    "photo-1518186285589-2f7649de83e0", "photo-1531297484001-80022131f5a1", "photo-1563986768609-322da13575f3",
-    "photo-1581091226825-a6a2a5aee158", "photo-1451187580459-43490279c0fa", "photo-1531297484001-80022131f5a1",
-    "photo-1518770660439-4636190af475", "photo-1562408590-e32931084e23", "photo-1563986768609-322da13575f3",
-    "photo-1581091226825-a6a2a5aee158", "photo-1524592094714-0f0654e20314", "photo-1542496658-e33a6d0d50f6"
-  ];
-
-  let selectedIDs = aetherisIDs;
+  let folderName = "3C";
   let themePrefix = "AETHERIS";
   let limit = 20; // 3D rendering limited to 20 images
 
   if (projectId === "orcus_audio") {
-    selectedIDs = orcusIDs;
+    folderName = "AIGC";
     themePrefix = "ORCUS";
     limit = 15; // AIGC limited to 15 images
   } else if (projectId === "wild_moss_perfume") {
-    selectedIDs = wildMossIDs;
+    folderName = "main-visual";
     themePrefix = "MOSS";
     limit = 30;
   } else if (projectId === "vert_chronograph") {
-    selectedIDs = vertIDs;
+    folderName = "xqysj";
     themePrefix = "VERT";
     limit = 13; // Details page design limited to 13 images
   }
 
-  const slicedIDs = selectedIDs.slice(0, limit);
-
-  return slicedIDs.map((id, index) => {
+  return Array.from({ length: limit }, (_, index) => {
     const zeroPadded = String(index + 1).padStart(2, '0');
     let itemTitle = `${themePrefix} // 渲染细节 ${zeroPadded}`;
     if (index === 0) itemTitle = `${themePrefix} // 主视觉高定渲染`;
@@ -207,12 +153,11 @@ const getGalleryImages = (projectId: string): { url: string; title: string }[] =
     if (index === 4) itemTitle = `${themePrefix} // 容积丁达尔散射环境图`;
 
     return {
-      url: `https://images.unsplash.com/${id}?auto=format&fit=crop&q=80&w=1200`,
+      url: `/${folderName}/${index + 1}.jpg`,
       title: itemTitle
     };
   });
 };
-
 export default function Works() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
